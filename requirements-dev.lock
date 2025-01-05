@@ -44,11 +44,14 @@ dataclasses-json==0.6.7
 faiss-cpu==1.9.0.post1
     # via code-chat
 filelock==3.16.1
+    # via huggingface-hub
     # via torch
+    # via transformers
 frozenlist==1.5.0
     # via aiohttp
     # via aiosignal
 fsspec==2024.12.0
+    # via huggingface-hub
     # via torch
 gitdb==4.0.12
     # via gitpython
@@ -63,6 +66,9 @@ httpx==0.27.2
     # via ollama
 httpx-sse==0.4.0
     # via langchain-community
+huggingface-hub==0.27.0
+    # via tokenizers
+    # via transformers
 idna==3.10
     # via anyio
     # via httpx
@@ -125,6 +131,7 @@ numpy==2.2.1
     # via pydeck
     # via streamlit
     # via torchvision
+    # via transformers
 ollama==0.4.5
     # via code-chat
     # via langchain-ollama
@@ -133,9 +140,11 @@ orjson==3.10.13
 packaging==24.2
     # via altair
     # via faiss-cpu
+    # via huggingface-hub
     # via langchain-core
     # via marshmallow
     # via streamlit
+    # via transformers
 pandas==2.2.3
     # via streamlit
 pillow==11.1.0
@@ -169,18 +178,24 @@ python-dotenv==1.0.1
 pytz==2024.2
     # via pandas
 pyyaml==6.0.2
+    # via huggingface-hub
     # via langchain
     # via langchain-community
     # via langchain-core
+    # via transformers
 referencing==0.35.1
     # via jsonschema
     # via jsonschema-specifications
+regex==2024.11.6
+    # via transformers
 requests==2.32.3
+    # via huggingface-hub
     # via langchain
     # via langchain-community
     # via langsmith
     # via requests-toolbelt
     # via streamlit
+    # via transformers
 requests-toolbelt==1.0.0
     # via langsmith
 rich==13.9.4
@@ -188,6 +203,8 @@ rich==13.9.4
 rpds-py==0.22.3
     # via jsonschema
     # via referencing
+safetensors==0.5.0
+    # via transformers
 setuptools==75.6.0
     # via torch
 six==1.17.0
@@ -209,6 +226,8 @@ tenacity==9.0.0
     # via langchain-community
     # via langchain-core
     # via streamlit
+tokenizers==0.21.0
+    # via transformers
 toml==0.10.2
     # via streamlit
 torch==2.5.1
@@ -218,9 +237,15 @@ torchvision==0.20.1
     # via code-chat
 tornado==6.4.2
     # via streamlit
+tqdm==4.67.1
+    # via huggingface-hub
+    # via transformers
+transformers==4.47.1
+    # via code-chat
 typing-extensions==4.12.2
     # via altair
     # via anyio
+    # via huggingface-hub
     # via langchain-core
     # via pydantic
     # via pydantic-core
