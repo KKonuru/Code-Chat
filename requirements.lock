@@ -62,6 +62,7 @@ h11==0.14.0
 httpcore==1.0.7
     # via httpx
 httpx==0.27.2
+    # via langgraph-sdk
     # via langsmith
     # via ollama
 httpx-sse==0.4.0
@@ -96,10 +97,18 @@ langchain-core==0.3.29
     # via langchain-community
     # via langchain-ollama
     # via langchain-text-splitters
+    # via langgraph
+    # via langgraph-checkpoint
 langchain-ollama==0.2.2
     # via code-chat
 langchain-text-splitters==0.3.4
     # via langchain
+langgraph==0.2.61
+    # via code-chat
+langgraph-checkpoint==2.0.9
+    # via langgraph
+langgraph-sdk==0.1.48
+    # via langgraph
 langsmith==0.2.10
     # via langchain
     # via langchain-community
@@ -114,6 +123,8 @@ mdurl==0.1.2
     # via markdown-it-py
 mpmath==1.3.0
     # via sympy
+msgpack==1.1.0
+    # via langgraph-checkpoint
 multidict==6.1.0
     # via aiohttp
     # via yarl
@@ -136,6 +147,7 @@ ollama==0.4.5
     # via code-chat
     # via langchain-ollama
 orjson==3.10.13
+    # via langgraph-sdk
     # via langsmith
 packaging==24.2
     # via altair
