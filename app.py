@@ -44,9 +44,9 @@ else:
 
 def response_generator(input_text):
     #Only if st.session_state.chatbot is defined
-    try:
+    if "chatbot" in st.session_state:
         response = st.session_state.chatbot.llmResponse(input_text)
-    except:
+    else:
         response = "The chatbot is not initialized yet. Please select a folder path."
     return response
 

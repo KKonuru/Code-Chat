@@ -133,6 +133,7 @@ mypy-extensions==1.0.0
 narwhals==1.20.1
     # via altair
 networkx==3.4.2
+    # via code-chat
     # via torch
 numpy==2.2.1
     # via faiss-cpu
