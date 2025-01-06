@@ -92,13 +92,17 @@ langchain==0.3.14
     # via langchain-community
 langchain-community==0.3.14
     # via code-chat
+    # via langchain-experimental
 langchain-core==0.3.29
     # via langchain
     # via langchain-community
+    # via langchain-experimental
     # via langchain-ollama
     # via langchain-text-splitters
     # via langgraph
     # via langgraph-checkpoint
+langchain-experimental==0.3.4
+    # via code-chat
 langchain-ollama==0.2.2
     # via code-chat
 langchain-text-splitters==0.3.4

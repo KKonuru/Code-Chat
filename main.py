@@ -73,7 +73,7 @@ class codeChat():
         embedding = outputs.last_hidden_state.mean(dim=1).squeeze().cpu().numpy()
         return embedding
 
-    def get_documents(self,files:list[str],llm:ChatOllama) -> list[Document]:
+    def get_documents(self,files:list[str]) -> list[Document]:
         docs = []
         for file in files:
             lang = file.split(".")[-1]
@@ -82,10 +82,9 @@ class codeChat():
             parent_dir = self._path.split("/")[-1]
             if file.index("/")!=-1:
                 parent_dir = file.split("/")[0]
-            summary = self.summarize_code(code)
             document = Document(
-                page_content = summary,
-                metadata = {"lang":Language(lang),"file":file,"parent_dir":parent_dir,"code":code}
+                page_content = code,
+                metadata = {"lang":Language(lang),"file":file,"parent_dir":parent_dir}
             )
             docs.append(document)
         return docs
@@ -100,14 +99,21 @@ class codeChat():
             split_doc = splitter_dict[lang].create_documents([doc.page_content]) #Split_doc is a type list of documents
             for s in split_doc:
                 s.metadata = doc.metadata
-            split_docs.extend(split_doc)
+            human_docs = []
+            for s in split_doc:
+                human_docs.append(
+                    Document(
+                        page_content= self.summarize_code(s.page_content),
+                        metadata = {"lang":s.metadata["lang"],"file":s.metadata["file"],"parent_dir":s.metadata["parent_dir"],"code":s.page_content}
+                ))
+            split_docs.extend(human_docs)
         return split_docs
     
     def create_vector_store(self)->FAISS:
         dir = self._path
         files = self.getFileNames()
         #To use the splitter, we need to create Documents for the files
-        chunked_docs = self.splitDocs(self.get_documents(files,self._llm))
+        chunked_docs = self.splitDocs(self.get_documents(files))
         
         #Create a vector store
         vector_store = FAISS(
@@ -165,7 +171,7 @@ class codeChat():
         
         prompt = ChatPromptTemplate.from_template(template)
         chain = prompt | self._llm | StrOutputParser()
-        
+
         return chain.stream({
             "query":query,
             "context":self.get_docs(query)
