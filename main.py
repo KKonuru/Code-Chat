@@ -99,15 +99,21 @@ class codeChat():
             split_doc = splitter_dict[lang].create_documents([doc.page_content]) #Split_doc is a type list of documents
             for s in split_doc:
                 s.metadata = doc.metadata
-            human_docs = []
-            for s in split_doc:
-                human_docs.append(
-                    Document(
-                        page_content= self.summarize_code(s.page_content),
-                        metadata = {"lang":s.metadata["lang"],"file":s.metadata["file"],"parent_dir":s.metadata["parent_dir"],"code":s.page_content}
-                ))
-            split_docs.extend(human_docs)
+            split_docs.extend(split_doc)
         return split_docs
+    
+    def human_summarize_docs(self,docs:list[Document])->list[Document]:
+        human_docs = []
+        for doc in docs:
+            new_dict = doc.metadata
+            new_dict["code"] = doc.page_content
+            human_docs.append(
+                Document(
+                    page_content = self.summarize_code(doc.page_content),
+                    metadata = new_dict
+                )
+            )
+        return human_docs
     
     def create_vector_store(self)->FAISS:
         dir = self._path
@@ -115,6 +121,8 @@ class codeChat():
         #To use the splitter, we need to create Documents for the files
         chunked_docs = self.splitDocs(self.get_documents(files))
         
+        #Create human summaries for the code snippets
+        chunked_docs = self.human_summarize_docs(chunked_docs)
         #Create a vector store
         vector_store = FAISS(
             index = faiss.IndexFlatIP(768),
