@@ -12,7 +12,7 @@ flowchart TD
 - 
 ## Left to do
 
-[] Refactor code
+[X] Refactor code
 [] Create a Agent that can pull information from outside documentation
 [] Create Mermaid Diagram
 [] Finish Readme
