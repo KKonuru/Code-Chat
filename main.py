@@ -182,7 +182,7 @@ class codeChat():
         
     
 def main():
-    proj_dir ="/Users/kausthubhkonuru/Personal Projects/counter-assignment" #input("Enter the path to the project directory: ")
+    proj_dir =input("Enter the path to the project directory: ")
     chatbot = codeChat(proj_dir)
     while True:
         query = input("Enter your query: ")
