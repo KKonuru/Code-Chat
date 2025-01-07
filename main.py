@@ -169,6 +169,7 @@ class codeChat():
         template = """
 
             Your job is to generate a response to the query. The query is a question about code that you need to answer. You can use the code snippets that are provided to you to help you answer the question.
+            Write out the entire code snippet that was helpful for the question.
             If you are not given any relevant code snippets you will respond with \"I do not have the necessary information to answer your question\"
             
             Query: {query}
