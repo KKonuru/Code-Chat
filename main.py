@@ -28,7 +28,6 @@ class codeChat():
         self._llm = ChatOllama(
             model = "codellama:13b",
             temperature = 0.8,
-            num_predict = 256,
             # other params ...
         )
         self._embedding= CodeEmbeddingFunction()
@@ -173,7 +172,6 @@ class codeChat():
         
         prompt = ChatPromptTemplate.from_template(template)
         chain = prompt | self._llm | StrOutputParser()
-
         return chain.stream({
             "query":query,
             "context":self.getDocs(query)

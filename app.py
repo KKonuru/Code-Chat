@@ -1,6 +1,6 @@
 import streamlit as st
 import os
-from main import codeChat
+from Agent import CodingAgent
 import subprocess
 
 #Pages title
@@ -22,7 +22,7 @@ def validateFolderPath(folder_path):
 #Lists all the file names that are stored in the vector database
 #Some files are exlcuded based on the file type
 def displayFiles():
-    fileNames = st.session_state.chatbot.getFileNames()
+    fileNames = st.session_state.chatbot.getRagApp().getFileNames()
     st.sidebar.write("Files in the directory:")
     
     for file in fileNames:
@@ -51,7 +51,7 @@ if folder_input and validateFolderPath(folder_input) and st.session_state.folder
     st.session_state.folder_path = folder_input
     st.sidebar.write(f"Selected folder path: {st.session_state.folder_path}")
     with st.spinner('Loading Codebase...'):
-            chatbot = codeChat(folder_input)
+            chatbot = CodingAgent(st.session_state.folder_path)             
     st.session_state.chatbot = chatbot
     st.sidebar.button("Open in VSCode",on_click=openInVscode)
     displayFiles()
@@ -65,14 +65,15 @@ elif folder_input and not validateFolderPath(folder_input):
 else:
     st.sidebar.write("No folder selected yet.")
 
-#Returns the streamed response from the chatbot
+#Returns the response from the chatbot
 def responseGenerator(input_text):
-    #Only if st.session_state.chatbot is defined
+    # Only if st.session_state.chatbot is defined
     if "chatbot" in st.session_state:
-        response = st.session_state.chatbot.llmResponse(input_text)
+        response = st.session_state.chatbot.query(input_text)
     else:
         response = "The chatbot is not initialized yet. Please select a folder path."
     return response
+
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -86,7 +87,9 @@ if prompt := st.chat_input("Ask away!"):
     with st.chat_message("user"):
         st.markdown(prompt)
 
+    # Generate and display the assistant's response
     with st.chat_message("assistant"):
-        # Here you can integrate your RAG system for generating responses
-        response = st.write_stream(responseGenerator(prompt))
-    st.session_state.messages.append({"role": "assistant", "content": response})
+        response = responseGenerator(prompt)  # Get the response
+        st.markdown(response)  # Display the response
+        st.session_state.messages.append({"role": "assistant", "content": response})  # Save it
+
