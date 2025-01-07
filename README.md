@@ -11,8 +11,3 @@ flowchart TD
 - Improving Tool Retrieval by Leveraging Large Language Models for Query Generation [https://arxiv.org/html/2412.03573v1]
 - 
 ## Left to do
-
-[] Refactor code
-[] Create a Agent that can pull information from outside documentation
-[] Create Mermaid Diagram
-[] Finish Readme
