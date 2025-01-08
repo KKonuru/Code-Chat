@@ -11,10 +11,10 @@ from langgraph.checkpoint.memory import MemorySaver
 
 
 class CodingAgent:
-    def __init__(self, codebase:str):
+    def __init__(self, codebase:str,temperature:float,rag_temperature:float):
         self._llm = ChatOllama(
             model="llama3-groq-tool-use",
-            temperature=0.5
+            temperature=temperature
         )
         wiki_api_wrapper = WikipediaAPIWrapper(top_k_results=1, doc_content_chars_max=250)
         wikipedia = WikipediaQueryRun(description="A tool to explain things in text format. Only use this tool if you think the user would benefit with a ", api_wrapper=wiki_api_wrapper)
@@ -25,10 +25,14 @@ class CodingAgent:
             """
             You are a highly capable coding assistant designed to help users understand codebases/projects/repositories and answer programming-related questions.
 
-            If the question asks you about something specific about code for a codebase or project or repository, then you must use the RAG tool using the full query of the question. The 
-            tool will get a response back answering the question and you must return this response to the user. Only if this tool says it cannot answer the question should you ask for more information.
+            If you are asked a specific question about code from a codebase or project or respository follow these steps:
+            1. Use the RAG tool to get the answer. You already have access to the codebase. Use the full query for the rag tool.
+            2. If the RAG tool cannot answer the question, ask for more information.
+            3. If the RAG tool can answer the question, return the full response from the RAG tool.
 
-            Else if the question is about a programming concept, you must provide relevant YouTube links and a brief Wikipedia description if necessary.
+            Else if the question is about a programming concept:
+            1. Use the youtube tool to get videos relevant to the question.
+             2. If relevant get a wikipedia summary for the question.
 
             If the question involves both tasks, you must split the query appropriately and send the codebase-related part to the RAG tool and handle the programming-related part separately by providing external resources and explanations.
 
@@ -91,7 +95,7 @@ class CodingAgent:
             )
         memory = MemorySaver()
         self._agent = create_react_agent(self._llm, self._tools, state_modifier=system_prompt,checkpointer=memory)
-        self._code_chat = codeChat(codebase)
+        self._code_chat = codeChat(codebase,rag_temperature)
     
     def _create_rag_tool(self):
         """Creates the RAG tool dynamically."""
@@ -119,6 +123,10 @@ class CodingAgent:
         return messages[-1].content
     def getRagApp(self):
         return self._code_chat
+    def setAgentTemp(self,temperature:float):
+        self._llm.temperature = temperature
+    def setCodeLLMTemp(self,temperature:float):
+        self._code_chat.adjustTemperature(temperature)
 
 
 def main():

@@ -17,7 +17,7 @@ from langchain_core.output_parsers import StrOutputParser
 
 #A chatbot that is instatiated for a specific code repository
 class codeChat():
-    def __init__(self,path:str):
+    def __init__(self,path:str,temperature:float):
 
         #CodeBert is used. This ensures the gpu is used to speed up embedding
         if torch.cuda.is_available():
@@ -27,7 +27,7 @@ class codeChat():
         
         self._llm = ChatOllama(
             model = "codellama:13b",
-            temperature = 0.8,
+            temperature = temperature,
             # other params ...
         )
         self._embedding= CodeEmbeddingFunction()
@@ -176,10 +176,13 @@ class codeChat():
             "query":query,
             "context":self.getDocs(query)
         })
+
+    def adjustTemperature(self,temperature:float):
+        self._llm.temperature = temperature
         
     
 def main():
-    proj_dir ="/Users/kausthubhkonuru/Personal Projects/counter-assignment" #input("Enter the path to the project directory: ")
+    proj_dir =input("Enter the path to the project directory: ")
     chatbot = codeChat(proj_dir)
     while True:
         query = input("Enter your query: ")
